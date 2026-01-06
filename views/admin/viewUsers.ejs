@@ -60,7 +60,20 @@
                                                             <td>
                                                                 <a href="/admin/edit-user/<%= user.id %>">Edit</a>
                                                             </td>
-                                                            
+                                                            <td>
+                                                                <div class="form-switch mb-0">
+                                                                    <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input"
+                                                                    id="userStatus-<%=user._id %>"
+                                                                    <%= user.isActive ? 'checked' : '' %>
+                                                                    onclick="toggleUserStatus('<%= user._id %>', this.checked)"
+                                                                    />
+                                                                    <label id="userStatusLable-<%= user._id %>">
+                                                                        <%= user.isActive ? 'Active' :'Deactive' %>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                 <% }) %>
                                                 
@@ -81,3 +94,23 @@
             <!-- End Page-content -->
            
 <%- include('../footer') %>
+<script>
+    function toggleUserStatus(userId, isActive){
+        fetch(`/admin/status/${userId}`, {
+            method: "Post",
+            headers:{
+                "Content-type": "application/json"
+            },
+            body:JSON.stringify({isActive})
+        })
+        .then((res)=> res.json())
+        .then((data) => {
+            const lable = document.getElementById(`userStatusLable-${userId}`);
+            lable.textContent = data.isActive ? "Active" : "Deactive";
+        })
+        .catch(err => {
+            console.log(err);
+            alert(err);
+        })
+    }
+</script>

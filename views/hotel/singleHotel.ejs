@@ -1,0 +1,275 @@
+<%- include("../header") %>
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+
+      <!-- Title -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18"><%= hotel.hotelName %></h4>
+
+            <div class="page-title-right">
+              <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a href="/hotel/view-hotels">Hotels</a></li>
+                <li class="breadcrumb-item active">Hotel Details</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotel details + images -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-body">
+
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h3 class="mb-1">
+                    <%= hotel.hotelName %>
+                    <% if (typeof hotel.isActive !== "undefined") { %>
+                      <span id="hotelStatusBadge"
+                        class="badge <%= hotel.isActive ? 'bg-success' : 'bg-danger' %> ms-2">
+                        <%= hotel.isActive ? 'Active' : 'Inactive' %>
+                      </span>
+                    <% } %>
+                  </h3>
+                  <p class="text-muted mb-0">
+                    <i class="mdi mdi-map-marker-outline"></i> <%= hotel.location %>
+                  </p>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+
+                  <!-- Hotel active / inactive switch -->
+                  <div class="form-check form-switch mb-0">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="hotelStatusSwitch"
+                      <%= hotel.isActive ? 'checked' : '' %>
+                      onclick="toggleHotelStatus('<%= hotel._id %>', this.checked)"
+                    >
+                    <label class="form-check-label" id="hotelStatusLabel" for="hotelStatusSwitch">
+                      <%= hotel.isActive ? 'Active' : 'Inactive' %>
+                    </label>
+                  </div>
+
+                  <!-- Edit hotel button -->
+                  <a href="/hotel/edit-hotel/<%= hotel._id %>" class="btn btn-warning btn-sm">
+                    Edit Hotel
+                  </a>
+                </div>
+              </div>
+
+              <hr>
+
+              <h5>Contact</h5>
+              <p class="mb-1"><strong>Email:</strong> <%= hotel.email %></p>
+              <p class="mb-3"><strong>Mobile:</strong> <%= hotel.mobileNo %></p>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Image gallery -->
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Gallery</h5>
+            </div>
+            <div class="card-body">
+
+              <% if (hotel.hotelImages && hotel.hotelImages.length > 0) { %>
+                <div class="row">
+                  <% hotel.hotelImages.forEach(img => { %>
+                    <div class="col-6 mb-3">
+                      <img
+                        src="<%= img %>"
+                        class="img-fluid rounded"
+                        style="height: 120px; width: 100%; object-fit: cover;"
+                        alt="Hotel Image"
+                      >
+                    </div>
+                  <% }) %>
+                </div>
+              <% } else { %>
+                <p>No images available.</p>
+              <% } %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rooms section -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h4 class="card-title mb-0">Rooms</h4>
+              <a href="/room/add-room" class="btn btn-success btn-sm">
+                + Add Room
+              </a>
+            </div>
+            <div class="card-body">
+
+              <% if (rooms && rooms.length > 0) { %>
+                <div class="table-responsive">
+                  <table class="table table-striped align-middle">
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Room Name</th>
+                        <th>Price (per bed/night)</th>
+                        <th>Max Guests</th>
+                        <th>Amenities</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% rooms.forEach(room => { %>
+                        <tr>
+                          <td>
+                            <img
+                              src="<%= room.roomImage || '/images/default-room.jpg' %>"
+                              alt="Room Image"
+                              style="height: 60px; width: 80px; object-fit: cover; border-radius: 4px;"
+                            >
+                          </td>
+                          <td><%= room.roomType %></td>
+                          <td>₹ <%= room.price %></td>
+                          <td><%= room.maxGuests %></td>
+                          <td>
+                            <% if (room.amenities && room.amenities.length > 0) { %>
+                              <span class="badge bg-light text-dark">
+                                <%= room.amenities.join(", ") %>
+                              </span>
+                            <% } else { %>
+                              <span class="text-muted">-</span>
+                            <% } %>
+                          </td>
+
+                          <!-- Room status -->
+                          <td>
+                            <div class="form-check form-switch mb-0">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="roomSwitch-<%= room._id %>"
+                                <%= room.isActive ? 'checked' : '' %>
+                                onclick="toggleRoomStatus('<%= hotel._id %>', '<%= room._id %>', this.checked)"
+                              >
+                              <label class="form-check-label" id="roomStatusLabel-<%= room._id %>" for="roomSwitch-<%= room._id %>">
+                                <%= room.isActive ? 'Active' : 'Inactive' %>
+                              </label>
+                            </div>
+                          </td>
+
+                          <td>
+                            <a href="/room/edit-room/<%= room._id %>" class="btn btn-sm btn-outline-warning mx-2">
+                              Edit
+                            </a>
+                            <a href="/room/delete-room/<%= room._id %>" class="btn btn-sm btn-outline-danger">
+                              Delete
+                            </a>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } else { %>
+                <p>No rooms added yet. Click "Add Room" to create one.</p>
+              <% } %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<%- include("../footer") %>
+
+<script>
+  // ---------------------------
+  // HOTEL ACTIVE/INACTIVE TOGGLE
+  // ---------------------------
+  function toggleHotelStatus(hotelId, isActive) {
+    fetch(`/hotel/status/${hotelId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isActive }),
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        throw new Error();
+      }
+      updateHotelStatusUI(isActive);
+    })
+    .catch(err => {
+      console.error("Error updating hotel status", err);
+      alert("Something went wrong while updating hotel status.");
+      document.getElementById("hotelStatusSwitch").checked = !isActive;
+    });
+  }
+
+  // 🔥 Update Hotel UI Live
+  function updateHotelStatusUI(isActive) {
+    const label = document.getElementById("hotelStatusLabel");
+    const badge = document.getElementById("hotelStatusBadge");
+
+    if (label) label.textContent = isActive ? "Active" : "Inactive";
+
+    if (badge) {
+      badge.textContent = isActive ? "Active" : "Inactive";
+      badge.classList.toggle("bg-success", isActive);
+      badge.classList.toggle("bg-danger", !isActive);
+    }
+  }
+
+  // ---------------------------
+  // ROOM ACTIVE/INACTIVE TOGGLE
+  // ---------------------------
+  function toggleRoomStatus(hotelId, roomId, isActive) {
+
+    fetch(`/room/status/${roomId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isActive }),
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        throw new Error();
+      }
+      updateRoomStatusUI(roomId, isActive);
+    })
+    .catch(err => {
+      console.error("Error updating room status", err);
+      alert("Something went wrong while updating room status.");
+      document.getElementById(`roomSwitch-${roomId}`).checked = !isActive;
+    });
+  }
+
+  // 🔥 Update Room UI Live
+  function updateRoomStatusUI(roomId, isActive) {
+    const label = document.getElementById(`roomStatusLabel-${roomId}`);
+
+    if (label) {
+      label.textContent = isActive ? "Active" : "Inactive";
+    }
+  }
+</script>

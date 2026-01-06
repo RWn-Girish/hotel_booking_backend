@@ -1,0 +1,87 @@
+<%- include('../header') %>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Edit Room</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Forms</a></li>
+                                            <li class="breadcrumb-item active">Edit Room</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card">
+
+                                    <div class="card-body p-4">
+                                        <form action="/room/update-room/<%= room._id %>" method="POST" enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div>
+                                                        <div class="mb-3">
+                                                            <label for="example-text-input" class="form-label">Hotel Name</label>
+                                                            <select name="hotel" class="form-control">
+                                                                <option value="">Select a Hotel</option>
+                                                                <% hotels.forEach((hotel) => { %>
+                                                                    <option value="<%= hotel._id %>" <% if(hotel.id == room.hotel) { %>selected <% } %> ><%= hotel.hotelName %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="example-search-input" class="form-label">Room Type</label>
+                                                            <input class="form-control" type="text" name="roomType" value="<%= room.roomType %>" placeholder="Deluxe Room, Family Room, AC Room..." >
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="example-email-input" class="form-label">Price Per Bed / Night (₹)</label>
+                                                            <input class="form-control" type="number" name="price" value="<%= room.price %>" placeholder="Example: 1500" id="example-email-input">
+                                                        </div>
+                                                        
+                                                        <div class="mb-3">
+                                                            <label for="example-number-input" class="form-label">Max Guests</label>
+                                                            <input class="form-control" type="number" name="maxGuests" value="<%= room.maxGuests %>" placeholder="Example: 2, 4, 6..." id="example-number-input">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="example-search-input" class="form-label">Amenities (comma separated)</label>
+                                                            <input class="form-control" type="text" name="amenities" value="<%= room.amenities %>" placeholder="WiFi, AC, TV, Breakfast, Parking" >
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="example-file-input" class="form-label">Room Image</label>
+                                                            <input class="form-control" type="file" name="roomImage" id="example-file-input" >
+                                                            <div class="mt-2">
+                                                                 <img src="<%= room.roomImage %>" alt="Hotel Image" style="width: 120px; height: auto; margin-right: 10px;">
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <button type="submit" class="btn btn-primary w-md">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+<%- include('../footer') %>

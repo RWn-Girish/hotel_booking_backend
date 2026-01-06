@@ -95,3 +95,17 @@ exports.updateUser = async (req, res) => {
         return res.redirect("/dashboard");
     }
 }
+
+exports.changeStatus = async (req, res) => {
+    try{
+        let user = await User.findById(req.params.id);
+        if(!user){
+            return res.json({message: 'User not Found'});
+        }
+        await User.findByIdAndUpdate(user._id, {isActive: !user.isActive}, {new: true});
+        return res.json({message: 'Status Changed', isActive: !user.isActive});
+    }catch(err){
+        console.log(err);
+        return res.json({message: err.message});
+    }
+}

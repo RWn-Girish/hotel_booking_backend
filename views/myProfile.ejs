@@ -1,0 +1,50 @@
+<%- include('header') %>
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center">
+            <!-- Profile Image -->
+            <div class="card-body">
+                <% if(user.profileImage){ %>
+                        <img
+                src="<%= user.profileImage %>"
+                alt="User Profile"
+                class="rounded-circle mb-3"
+                width="120"
+                height="120"
+              />
+                <% } else{ %>
+                    <img
+                src="/assets/images/users/avatar-1.jpg"
+                alt="User Profile"
+                class="rounded-circle mb-3"
+                width="120"
+                height="120"
+              />
+                <% } %>
+
+              <!-- User Info -->
+              <h4 class="card-title mb-1">
+                <%= user.firstName %> <%= user.lastName %>
+              </h4>
+              <p class="text-muted mb-2">
+                <%= user.role || 'User' %>
+              </p>
+              <p class="text-muted mb-2">
+                <strong>Email: </strong><%= user.email %>
+              </p>
+              <p class="text-muted mb-2">
+                <strong>Mobile No: </strong><%= user.mobileNo %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>
