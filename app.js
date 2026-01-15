@@ -7,6 +7,7 @@ const path  =require('path');
 const session = require('express-session');
 const passport = require('passport');
 const localStrategy = require('./middleware/localStrategy');
+const cookieParser = require('cookie-parser');
 
 //db Connection
 dbConnect();
@@ -17,6 +18,7 @@ app.set("views", path.join(__dirname, "views"));
 //middleware
 app.use(express.static('public'));
 app.use(express.urlencoded());
+app.use(cookieParser());
 app.use(session({
     name: "booking-app",
     secret: process.env.SECRET_KEY,
